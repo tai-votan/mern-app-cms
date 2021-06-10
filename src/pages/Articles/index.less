@@ -1,0 +1,21 @@
+.spaceImage {
+  :global {
+    .ant-space-item {
+      &:first-child {
+        line-height: 0;
+      }
+      &:last-child {
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+    }
+  }
+  .articleImage {
+    object-fit: cover;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+  }
+}
