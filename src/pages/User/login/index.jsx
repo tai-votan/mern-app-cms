@@ -31,9 +31,6 @@ const Login = (props) => {
   return (
     <div className={styles.main}>
       <ProForm
-        initialValues={{
-          autoLogin: true,
-        }}
         submitter={{
           render: (_, dom) => dom.pop(),
           submitButtonProps: {
@@ -103,23 +100,6 @@ const Login = (props) => {
             ]}
           />
         </>
-
-        <div
-          style={{
-            marginBottom: 24,
-          }}
-        >
-          <ProFormCheckbox noStyle name="autoLogin">
-            <FormattedMessage id="pages.login.rememberMe" defaultMessage="Auto login" />
-          </ProFormCheckbox>
-          <a
-            style={{
-              float: 'right',
-            }}
-          >
-            <FormattedMessage id="pages.login.forgotPassword" defaultMessage="Forget password" />
-          </a>
-        </div>
       </ProForm>
     </div>
   );

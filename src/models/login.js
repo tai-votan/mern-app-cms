@@ -60,7 +60,7 @@ const Model = {
   },
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.data?.roles);
+      setAuthority(payload.data);
       return { ...state, status: payload.status };
     },
   },

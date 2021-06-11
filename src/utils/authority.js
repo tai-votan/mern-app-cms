@@ -25,9 +25,11 @@ export function getAuthority(str) {
 
   return authority;
 }
-export function setAuthority(authority) {
+export function setAuthority(userInfo) {
+  const { roles: authority, accessToken } = userInfo;
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
   localStorage.setItem('antd-pro-authority', JSON.stringify(proAuthority)); // auto reload
+  localStorage.setItem('accessToken', accessToken); // auto reload
 
   reloadAuthorized();
 }

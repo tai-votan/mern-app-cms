@@ -1,6 +1,7 @@
 /** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import { getAccessToken } from '@/utils/utils';
 
 const codeMessage = {
   200: 'The server successfully returned the requested data. Validating response data...',
@@ -48,9 +49,30 @@ const errorHandler = (error) => {
  * @zh-CN 配置request请求时的默认参数
  */
 
-const request = extend({
+const umiRequest = extend({
   errorHandler,
   // default error handling
   credentials: 'include', // Does the default request bring cookies
 });
+
+const request = (url, options) => {
+  const newOptions = { ...options };
+  const accessToken = getAccessToken();
+  const locale = localStorage.getItem('umi_locale') || 'vi-VN';
+
+  newOptions.headers = {
+    ...newOptions.headers,
+    'Accept-Language': locale,
+  };
+
+  if (accessToken) {
+    newOptions.headers = {
+      Authorization: accessToken,
+      ...newOptions.headers,
+    };
+  }
+
+  return umiRequest(url, newOptions)
+}
+
 export default request;

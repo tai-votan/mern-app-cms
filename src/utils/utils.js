@@ -22,3 +22,15 @@ export const isAntDesignProOrDev = () => {
   return isAntDesignPro();
 };
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
+
+export function getAccessToken() {
+  try {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      return `Bearer ${accessToken}`;
+    }
+  } catch (e) {
+    console.log('token parse error', e);
+  }
+  return null;
+}
