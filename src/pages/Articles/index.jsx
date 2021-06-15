@@ -5,7 +5,7 @@ import { SearchOutlined, PlusCircleOutlined, FilterOutlined } from '@ant-design/
 import { useIntl, connect, FormattedMessage } from 'umi';
 import columnsTable from './colums';
 
-const Index = (props) => {
+const Articles = (props) => {
   const [limit, setLimit] = useState(20);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const { formatMessage } = useIntl();
@@ -23,6 +23,7 @@ const Index = (props) => {
         limit,
       },
     });
+    setLimit(1);
   }, []);
 
   const columns = useMemo(() => columnsTable, []);
@@ -57,6 +58,7 @@ const Index = (props) => {
         </Col>
       </Row>
       <Table
+        rowKey={'_id'}
         loading={loading['article/fetchArticle']}
         rowSelection={{
           selectedRowKeys,
@@ -72,4 +74,4 @@ const Index = (props) => {
   );
 };
 
-export default connect(({ article, loading }) => ({ article, loading: loading.effects }))(Index);
+export default connect(({ article, loading }) => ({ article, loading: loading.effects }))(Articles);

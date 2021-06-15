@@ -1,20 +1,36 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, {
+  // useState,
+  useEffect,
+  // useMemo
+} from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { EyeOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Row, Col, Input, Button, Card, DatePicker, Space, Select, Form, Radio } from 'antd';
-import { useIntl, connect, FormattedMessage } from 'umi';
+import {
+  // useIntl,
+  connect,
+  // FormattedMessage
+} from 'umi';
 
 const { Option } = Select;
 
 const ArticlesDetails = (props) => {
-  const { formatMessage } = useIntl();
+  // const { formatMessage } = useIntl();
   const {
+    match: { params },
     dispatch,
-    loading,
-    page: { pages },
+    // loading,
+    // article: { articleDetails },
   } = props;
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    dispatch({
+      type: 'article/fetchArticleBySlug',
+      payload: {
+        slug: params.articleId,
+      },
+    });
+  }, []);
 
   function onChange(value, dateString) {
     console.log('Selected Time: ', value);
@@ -109,6 +125,6 @@ const ArticlesDetails = (props) => {
   );
 };
 
-export default connect(({ page, loading }) => ({ page, loading: loading.effects }))(
+export default connect(({ article, loading }) => ({ article, loading: loading.effects }))(
   ArticlesDetails,
 );

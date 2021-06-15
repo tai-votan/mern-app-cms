@@ -10,13 +10,13 @@ const columns = [
     title: <FormattedMessage id={'articles.title'} />,
     key: 'title',
     width: 450,
-    render: ({ id, title, imageUrl }) => (
-      <Link to={`/admin/articles/${id}`}>
+    render: ({ slug, title, featuredImage }) => (
+      <Link to={`/admin/articles/${slug}`}>
         <Space className={styles.spaceImage}>
           <Image
             width={48}
             height={48}
-            src={imageUrl}
+            src={featuredImage || '/static/logo.f0355d39.svg'}
             preview={false}
             alt={title}
             className={styles.articleImage}
@@ -35,7 +35,7 @@ const columns = [
     },
     render: ({ blogId, blogTitle }) => (
       <Tooltip placement="topLeft" title={blogTitle}>
-        <Link to={`/admin/blogs/${blogId}`}>{blogTitle}</Link>
+        <Link to={`/admin/blogs/${blogId}`}>{blogTitle || <DashOutlined />}</Link>
       </Tooltip>
     ),
   },
@@ -43,8 +43,9 @@ const columns = [
     title: <FormattedMessage id={'articles.tags'} />,
     key: 'tags',
     dataIndex: 'tags',
-    render: (tags) => {
+    render: (listTags = '') => {
       const sizeTags = 5;
+      const tags = listTags.split(',');
       return (
         <Space size={8} wrap>
           {tags.slice(0, sizeTags).map((tag) => (
@@ -67,16 +68,16 @@ const columns = [
     ellipsis: {
       showTitle: false,
     },
-    render: (text) => (
-      <Tooltip placement="topLeft" title={text}>
-        {text}
+    render: (author) => (
+      <Tooltip placement="topLeft" title={author}>
+        {author || <DashOutlined />}
       </Tooltip>
     ),
   },
   {
     title: <FormattedMessage id={'articles.date'} />,
-    key: 'published_at',
-    dataIndex: 'published_at',
+    key: 'updatedAt',
+    dataIndex: 'updatedAt',
     width: 130,
     render: (date) => moment(date).format('DD/MM/YYYY'),
   },
