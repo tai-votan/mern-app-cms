@@ -34,3 +34,12 @@ export function getAccessToken() {
   }
   return null;
 }
+
+export function toNumber(str) {
+  try {
+    return parseInt(str, 10);
+  } catch (e) {
+    console.log(`Func toNumber arg error`, { e });
+  }
+  return null;
+}

@@ -1,9 +1,12 @@
-import { fetchBlog } from '@/services/blog';
+import { fetchBlog, createBlog, fetchBlogDetails } from '@/services/blog';
+import { history } from 'umi';
+import routesPath from '@/../config/routesPath';
 
 const Model = {
   namespace: 'blog',
   state: {
     blogs: [],
+    blogDetails: {},
   },
   effects: {
     *fetchBlog({ payload }, { call, put }) {
@@ -11,9 +14,22 @@ const Model = {
       yield put({
         type: 'save',
         payload: {
-          blogs: response || [],
+          blogs: response.data?.categories || [],
         },
-      }); // Login successfully
+      });
+    },
+    *createBlog({ payload }, { call, put }) {
+      const { data } = yield call(createBlog, payload);
+      history.replace(`${routesPath.BLOGS}/${data.slug}`);
+    },
+    *fetchBlogDetails({ payload }, { call, put }) {
+      const { data } = yield call(fetchBlogDetails, payload);
+      yield put({
+        type: 'save',
+        payload: {
+          blogDetails: data?.category || {}
+        }
+      })
     },
   },
   reducers: {

@@ -56,7 +56,7 @@ export default [
                     hideInMenu: true,
                   },
                   {
-                    path: `${routesPath.BLOGS}/:articleId`,
+                    path: `${routesPath.BLOGS}/:blogId`,
                     name: 'blogsDetails',
                     component: './BlogsDetails',
                     hideInMenu: true,

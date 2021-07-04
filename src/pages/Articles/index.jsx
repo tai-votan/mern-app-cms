@@ -3,7 +3,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import { Table, Row, Col, Input, Button, Popover } from 'antd';
 import { SearchOutlined, PlusCircleOutlined, FilterOutlined } from '@ant-design/icons';
 import { useIntl, connect, FormattedMessage } from 'umi';
-import columnsTable from './colums';
+import columnsTable from './columns';
 
 const Articles = (props) => {
   const [limit, setLimit] = useState(20);

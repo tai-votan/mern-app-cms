@@ -62,8 +62,8 @@ const columns = [
   },
   {
     title: <FormattedMessage id={'articles.author'} />,
-    key: 'authorName',
-    dataIndex: 'authorName',
+    key: 'author',
+    dataIndex: 'author',
     width: 140,
     ellipsis: {
       showTitle: false,

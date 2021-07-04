@@ -1,7 +1,7 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert } from 'antd';
 import React from 'react';
-import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
+import ProForm, { ProFormText } from '@ant-design/pro-form';
 import { useIntl, connect, FormattedMessage } from 'umi';
 import styles from './index.less';
 

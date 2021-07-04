@@ -8,14 +8,15 @@ const columns = [
     title: <FormattedMessage id={'blogs.title'} />,
     key: 'title',
     width: 200,
-    render: ({ id, title }) => <Link to={`/admin/blogs/${id}`}>{title}</Link>,
+    render: ({ slug, title }) => <Link to={`/admin/blogs/${slug}`}>{title}</Link>,
   },
   {
     title: <FormattedMessage id={'blogs.tags'} />,
     key: 'tags',
     dataIndex: 'tags',
-    render: (tags) => {
+    render: (listTags = '') => {
       const sizeTags = 15;
+      const tags = listTags.split(',');
       return (
         <Space size={8} wrap>
           {tags.slice(0, sizeTags).map((tag) => (

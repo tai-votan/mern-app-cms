@@ -1,34 +1,28 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { DeleteOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Row, Col, Input, Button, Card, Space, Select, Form, Upload, message } from 'antd';
-import { useIntl, connect, FormattedMessage } from 'umi';
+import { useIntl } from 'umi';
+import { useDispatch } from 'react-redux';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import styles from './index.less';
 
 const { Option } = Select;
 
-const BlogsDetails = (props) => {
+const CreateBlog = (props) => {
   const { formatMessage } = useIntl();
   const [form] = Form.useForm();
   const [imageUrl, setImageUrl] = useState('');
   const [uploading, setUpLoading] = useState(false);
-  const {
-    dispatch,
-    loading,
-    page: { pages },
-  } = props;
-
-  useEffect(() => {}, []);
-
-  function onChange(value, dateString) {
-    console.log('Selected Time: ', value);
-    console.log('Formatted Selected Time: ', dateString);
-  }
+  const dispatch = useDispatch();
 
   function onFinish(value) {
     console.log('onOk: ', value);
+    dispatch({
+      type: 'blog/createBlog',
+      payload: value
+    })
   }
 
   function getBase64(img, callback) {
@@ -49,18 +43,16 @@ const BlogsDetails = (props) => {
     return isJpgOrPng && isLt2M;
   }
 
-  const handleChange = info => {
+  const handleChange = (info) => {
     if (info.file.status === 'uploading') {
-      setUpLoading(true)
+      setUpLoading(true);
       return;
     }
     if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imgUrl => {
-        setImageUrl(imgUrl)
-        setUpLoading(false)
-      }
-      );
+      getBase64(info.file.originFileObj, (imgUrl) => {
+        setImageUrl(imgUrl);
+        setUpLoading(false);
+      });
     }
   };
 
@@ -74,23 +66,21 @@ const BlogsDetails = (props) => {
   return (
     <PageContainer header={{ title: false }}>
       <Form form={form} size={'large'} layout="vertical" onFinish={onFinish}>
-        <Row justify={'end'} style={{ marginBottom: 16 }}>
-          <Col>
-            <Space size={'middle'}>
-              <Button type={'primary'} htmlType="submit">
-                Save
-              </Button>
-            </Space>
-          </Col>
-        </Row>
         <Row gutter={16} style={{ marginBottom: 16 }}>
           <Col xs={18}>
             <Space direction={'vertical'} size={'middle'} style={{ display: 'flex' }}>
-              <Card title={'Chi tiết trang nội dung'}>
-                <Form.Item label="Field A" name={'title'}>
+              <Card title={formatMessage({ id: 'blogs.create.cards.information' })}>
+                <Form.Item
+                  label={formatMessage({ id: 'blogs.create.cards.information.title' })}
+                  name={'title'}
+                >
                   <Input placeholder="input placeholder" />
                 </Form.Item>
-                <Form.Item label="Field B" name={'content'} className={styles.blogEditor}>
+                <Form.Item
+                  label={formatMessage({ id: 'blogs.create.cards.information.content' })}
+                  name={'content'}
+                  className={styles.blogEditor}
+                >
                   <CKEditor
                     editor={ClassicEditor}
                     data=""
@@ -106,20 +96,61 @@ const BlogsDetails = (props) => {
                   />
                 </Form.Item>
               </Card>
-              <Card title={'Tối ưu SEO'}>
+              <Card title={formatMessage({ id: 'SEO.cardTitle' })}>
                 <Form.Item
-                  label="Field A"
-                  name={'SEO.title'}
-                  extra="We must make sure that your are a human."
+                  noStyle
+                  shouldUpdate={({ metaTitle }, cur) => metaTitle !== cur.metaTitle }
                 >
-                  <Input placeholder="input placeholder" />
+                  {({ getFieldValue }) => {
+                    const titleLength = (getFieldValue('metaTitle') || '').length;
+                    return (
+                      <Form.Item
+                        label={formatMessage({ id: 'SEO.title' })}
+                        name={'metaTitle'}
+                        extra={`${titleLength}/70 ${formatMessage({ id: 'SEO.characters' })}`}
+                        rules={[
+                          {
+                            max: 70,
+                            message: formatMessage(
+                              { id: 'SEO.characters.max' },
+                              { title: formatMessage({ id: 'SEO.title' }), limit: 320 },
+                            ),
+                          },
+                        ]}
+                      >
+                        <Input />
+                      </Form.Item>
+                    )
+                  }}
                 </Form.Item>
                 <Form.Item
-                  label="Field B"
-                  name={'SEO.description'}
-                  extra="We must make sure that your are a human."
+                  noStyle
+                  shouldUpdate={({ metaDescription }, curValues) => metaDescription !== curValues.metaDescription }
                 >
-                  <Input placeholder="input placeholder" />
+                  {({ getFieldValue }) => {
+                    const descriptionLength = (getFieldValue('metaDescription') || '').length;
+                    return (
+                      <Form.Item
+                        label={formatMessage({ id: 'SEO.description' })}
+                        name={'metaDescription'}
+                        extra={`${descriptionLength}/320 ${formatMessage({ id: 'SEO.characters' })}`}
+                        rules={[
+                          {
+                            max: 320,
+                            message: formatMessage(
+                              { id: 'SEO.characters.max' },
+                              { title: formatMessage({ id: 'SEO.description' }), limit: 320 },
+                            ),
+                          },
+                        ]}
+                      >
+                        <Input />
+                      </Form.Item>
+                    );
+                  }}
+                </Form.Item>
+                <Form.Item label={formatMessage({ id: 'SEO.slug' })} name={'slug'}>
+                  <Input prefix={`${location.origin}/`} />
                 </Form.Item>
               </Card>
             </Space>
@@ -137,7 +168,11 @@ const BlogsDetails = (props) => {
                   beforeUpload={beforeUpload}
                   onChange={handleChange}
                 >
-                  {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                  {imageUrl ? (
+                    <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+                  ) : (
+                    uploadButton
+                  )}
                 </Upload>
               </Card>
               <Card title={'Tags'}>
@@ -180,4 +215,4 @@ const BlogsDetails = (props) => {
   );
 };
 
-export default connect(({ page, loading }) => ({ page, loading: loading.effects }))(BlogsDetails);
+export default CreateBlog

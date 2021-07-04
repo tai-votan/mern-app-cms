@@ -18,7 +18,7 @@ const codeMessage = {
   500: 'The server has an error. Please check the server',
   502: 'Gateway error',
   503: 'The service is unavailable, the server is temporarily overloaded or maintained',
-  504: 'The gateway timed out'
+  504: 'The gateway timed out',
 };
 /**
  * @zh-CN 异常处理程序
@@ -30,9 +30,9 @@ const errorHandler = (error) => {
 
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
+    const { status } = response;
     notification.error({
-      message: `Request error ${status}: ${url}`,
+      message: `Request error ${status}`,
       description: errorText,
     });
   } else if (!response) {
@@ -72,7 +72,7 @@ const request = (url, options) => {
     };
   }
 
-  return umiRequest(url, newOptions)
-}
+  return umiRequest(url, newOptions);
+};
 
 export default request;
