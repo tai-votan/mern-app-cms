@@ -17,6 +17,7 @@ function DataTable(props) {
 
   return (
     <Table
+      rowKey={'_id'}
       loading={loading}
       rowSelection={{
         selectedRowKeys,

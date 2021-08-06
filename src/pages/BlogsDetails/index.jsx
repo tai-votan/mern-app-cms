@@ -11,7 +11,8 @@ import {
   Select,
   Form,
   Upload,
-  message, Skeleton
+  message,
+  Skeleton,
 } from 'antd';
 import { useIntl } from 'umi';
 import { useSelector, useDispatch } from 'react-redux';
@@ -27,7 +28,9 @@ const BlogDetails = (props) => {
   const [imageUrl, setImageUrl] = useState('');
   const [uploading, setUpLoading] = useState(false);
   const dispatch = useDispatch();
-  const { match: { params } } = props;
+  const {
+    match: { params },
+  } = props;
   const {
     blog: { blogDetails },
     loading: { 'blog/fetchBlogDetails': loading },
@@ -37,17 +40,17 @@ const BlogDetails = (props) => {
     dispatch({
       type: 'blog/fetchBlogDetails',
       payload: {
-        slug: params.blogId
-      }
-    })
-  }, [params.blogId]);
+        slug: params.blogId,
+      },
+    });
+  }, [params.blogId, dispatch]);
 
   function onFinish(value) {
     console.log('onOk: ', value);
     dispatch({
       type: 'blog/createBlog',
-      payload: value
-    })
+      payload: value,
+    });
   }
 
   function getBase64(img, callback) {
@@ -131,7 +134,13 @@ const BlogDetails = (props) => {
 
   return (
     <PageContainer header={{ title: false }}>
-      <Form form={form} size={'large'} layout="vertical" onFinish={onFinish} initialValues={blogDetails}>
+      <Form
+        form={form}
+        size={'large'}
+        layout="vertical"
+        onFinish={onFinish}
+        initialValues={blogDetails}
+      >
         <Row gutter={16} style={{ marginBottom: 16 }}>
           <Col xs={18}>
             <Space direction={'vertical'} size={'middle'} style={{ display: 'flex' }}>
@@ -165,7 +174,7 @@ const BlogDetails = (props) => {
               <Card title={formatMessage({ id: 'SEO.cardTitle' })}>
                 <Form.Item
                   noStyle
-                  shouldUpdate={({ metaTitle }, cur) => metaTitle !== cur.metaTitle }
+                  shouldUpdate={({ metaTitle }, cur) => metaTitle !== cur.metaTitle}
                 >
                   {({ getFieldValue }) => {
                     const titleLength = (getFieldValue('metaTitle') || '').length;
@@ -186,12 +195,14 @@ const BlogDetails = (props) => {
                       >
                         <Input />
                       </Form.Item>
-                    )
+                    );
                   }}
                 </Form.Item>
                 <Form.Item
                   noStyle
-                  shouldUpdate={({ metaDescription }, curValues) => metaDescription !== curValues.metaDescription }
+                  shouldUpdate={({ metaDescription }, curValues) =>
+                    metaDescription !== curValues.metaDescription
+                  }
                 >
                   {({ getFieldValue }) => {
                     const descriptionLength = (getFieldValue('metaDescription') || '').length;
@@ -199,7 +210,9 @@ const BlogDetails = (props) => {
                       <Form.Item
                         label={formatMessage({ id: 'SEO.description' })}
                         name={'metaDescription'}
-                        extra={`${descriptionLength}/320 ${formatMessage({ id: 'SEO.characters' })}`}
+                        extra={`${descriptionLength}/320 ${formatMessage({
+                          id: 'SEO.characters',
+                        })}`}
                         rules={[
                           {
                             max: 320,
@@ -216,6 +229,7 @@ const BlogDetails = (props) => {
                   }}
                 </Form.Item>
                 <Form.Item label={formatMessage({ id: 'SEO.slug' })} name={'slug'}>
+                  {/* eslint-disable-next-line no-restricted-globals */}
                   <Input prefix={`${location.origin}/`} />
                 </Form.Item>
               </Card>
@@ -237,8 +251,8 @@ const BlogDetails = (props) => {
                   {imageUrl ? (
                     <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
                   ) : (
-                     uploadButton
-                   )}
+                    uploadButton
+                  )}
                 </Upload>
               </Card>
               <Card title={'Tags'}>
@@ -281,4 +295,4 @@ const BlogDetails = (props) => {
   );
 };
 
-export default BlogDetails
+export default BlogDetails;

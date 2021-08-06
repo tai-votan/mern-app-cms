@@ -18,7 +18,7 @@ const Model = {
         },
       });
     },
-    *createBlog({ payload }, { call, put }) {
+    *createBlog({ payload }, { call }) {
       const { data } = yield call(createBlog, payload);
       history.replace(`${routesPath.BLOGS}/${data.slug}`);
     },
@@ -27,9 +27,9 @@ const Model = {
       yield put({
         type: 'save',
         payload: {
-          blogDetails: data?.category || {}
-        }
-      })
+          blogDetails: data?.category || {},
+        },
+      });
     },
   },
   reducers: {

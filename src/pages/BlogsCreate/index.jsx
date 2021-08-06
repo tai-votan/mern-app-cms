@@ -11,6 +11,7 @@ import styles from './index.less';
 const { Option } = Select;
 
 const CreateBlog = (props) => {
+  console.log(`Func CreateBlog Line: 14, PARAMS: { props }`, { props });
   const { formatMessage } = useIntl();
   const [form] = Form.useForm();
   const [imageUrl, setImageUrl] = useState('');
@@ -18,11 +19,10 @@ const CreateBlog = (props) => {
   const dispatch = useDispatch();
 
   function onFinish(value) {
-    console.log('onOk: ', value);
     dispatch({
       type: 'blog/createBlog',
-      payload: value
-    })
+      payload: value,
+    });
   }
 
   function getBase64(img, callback) {
@@ -99,7 +99,7 @@ const CreateBlog = (props) => {
               <Card title={formatMessage({ id: 'SEO.cardTitle' })}>
                 <Form.Item
                   noStyle
-                  shouldUpdate={({ metaTitle }, cur) => metaTitle !== cur.metaTitle }
+                  shouldUpdate={({ metaTitle }, cur) => metaTitle !== cur.metaTitle}
                 >
                   {({ getFieldValue }) => {
                     const titleLength = (getFieldValue('metaTitle') || '').length;
@@ -120,12 +120,14 @@ const CreateBlog = (props) => {
                       >
                         <Input />
                       </Form.Item>
-                    )
+                    );
                   }}
                 </Form.Item>
                 <Form.Item
                   noStyle
-                  shouldUpdate={({ metaDescription }, curValues) => metaDescription !== curValues.metaDescription }
+                  shouldUpdate={({ metaDescription }, curValues) =>
+                    metaDescription !== curValues.metaDescription
+                  }
                 >
                   {({ getFieldValue }) => {
                     const descriptionLength = (getFieldValue('metaDescription') || '').length;
@@ -133,7 +135,9 @@ const CreateBlog = (props) => {
                       <Form.Item
                         label={formatMessage({ id: 'SEO.description' })}
                         name={'metaDescription'}
-                        extra={`${descriptionLength}/320 ${formatMessage({ id: 'SEO.characters' })}`}
+                        extra={`${descriptionLength}/320 ${formatMessage({
+                          id: 'SEO.characters',
+                        })}`}
                         rules={[
                           {
                             max: 320,
@@ -150,6 +154,7 @@ const CreateBlog = (props) => {
                   }}
                 </Form.Item>
                 <Form.Item label={formatMessage({ id: 'SEO.slug' })} name={'slug'}>
+                  {/* eslint-disable-next-line no-restricted-globals */}
                   <Input prefix={`${location.origin}/`} />
                 </Form.Item>
               </Card>
@@ -215,4 +220,4 @@ const CreateBlog = (props) => {
   );
 };
 
-export default CreateBlog
+export default CreateBlog;
